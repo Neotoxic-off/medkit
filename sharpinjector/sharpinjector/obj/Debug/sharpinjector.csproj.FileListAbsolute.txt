@@ -1,0 +1,15 @@
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\bin\Debug\sharpinjector.exe.config
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\bin\Debug\sharpinjector.exe
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\bin\Debug\sharpinjector.pdb
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\bin\Debug\Newtonsoft.Json.dll
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\bin\Debug\RestSharp.dll
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\bin\Debug\Newtonsoft.Json.xml
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\bin\Debug\RestSharp.xml
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.Main.resources
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.Properties.Resources.resources
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.csproj.GenerateResource.cache
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.csproj.CoreCompileInputs.cache
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.csproj.CopyComplete
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.exe
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.pdb
+C:\Users\paulg\Bureau\Dead by Neo\sharpinjector\sharpinjector\obj\Debug\sharpinjector.csprojAssemblyReference.cache

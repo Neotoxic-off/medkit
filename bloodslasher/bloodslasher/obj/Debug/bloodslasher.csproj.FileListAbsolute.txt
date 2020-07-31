@@ -1,0 +1,13 @@
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\bin\Debug\bloodslasher.exe.config
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\bin\Debug\bloodslasher.exe
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\bin\Debug\bloodslasher.pdb
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.csprojAssemblyReference.cache
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.Form1.resources
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.Properties.Resources.resources
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.csproj.GenerateResource.cache
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.csproj.CoreCompileInputs.cache
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.csproj.CopyComplete
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.exe
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\obj\Debug\bloodslasher.pdb
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\bin\Debug\RestSharp.dll
+C:\Users\paulg\Bureau\Dead by Neo\bloodslasher\bloodslasher\bin\Debug\RestSharp.xml
