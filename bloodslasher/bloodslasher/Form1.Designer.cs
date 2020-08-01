@@ -39,6 +39,8 @@
             this.bloodpoint = new System.Windows.Forms.Label();
             this.allbloodpoint = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.secret = new System.Windows.Forms.CheckBox();
+            this.message = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,7 +69,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(225, 77);
+            this.label2.Location = new System.Drawing.Point(225, 68);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 13);
             this.label2.TabIndex = 3;
@@ -77,7 +79,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(186, 119);
+            this.label4.Location = new System.Drawing.Point(186, 110);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(105, 13);
             this.label4.TabIndex = 7;
@@ -101,7 +103,7 @@
             this.cookie.BackColor = System.Drawing.SystemColors.WindowText;
             this.cookie.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cookie.ForeColor = System.Drawing.SystemColors.Window;
-            this.cookie.Location = new System.Drawing.Point(299, 75);
+            this.cookie.Location = new System.Drawing.Point(299, 66);
             this.cookie.Name = "cookie";
             this.cookie.Size = new System.Drawing.Size(189, 20);
             this.cookie.TabIndex = 10;
@@ -111,11 +113,12 @@
             this.maximum.BackColor = System.Drawing.SystemColors.WindowText;
             this.maximum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.maximum.ForeColor = System.Drawing.SystemColors.Window;
-            this.maximum.Location = new System.Drawing.Point(299, 117);
+            this.maximum.Location = new System.Drawing.Point(299, 108);
             this.maximum.MaxLength = 6;
             this.maximum.Name = "maximum";
             this.maximum.Size = new System.Drawing.Size(189, 20);
             this.maximum.TabIndex = 12;
+            this.maximum.TextChanged += new System.EventHandler(this.maximum_TextChanged);
             // 
             // bloodpoint
             // 
@@ -147,11 +150,35 @@
             this.label5.TabIndex = 17;
             this.label5.Text = "thanks to Black";
             // 
+            // secret
+            // 
+            this.secret.AutoSize = true;
+            this.secret.BackColor = System.Drawing.Color.Transparent;
+            this.secret.Location = new System.Drawing.Point(383, 144);
+            this.secret.Name = "secret";
+            this.secret.Size = new System.Drawing.Size(105, 17);
+            this.secret.TabIndex = 18;
+            this.secret.Text = "Shrine of secrets";
+            this.secret.UseVisualStyleBackColor = false;
+            this.secret.CheckedChanged += new System.EventHandler(this.secret_CheckedChanged);
+            // 
+            // message
+            // 
+            this.message.AutoSize = true;
+            this.message.BackColor = System.Drawing.Color.Transparent;
+            this.message.ForeColor = System.Drawing.Color.Red;
+            this.message.Location = new System.Drawing.Point(186, 145);
+            this.message.Name = "message";
+            this.message.Size = new System.Drawing.Size(0, 13);
+            this.message.TabIndex = 19;
+            // 
             // Form1
             // 
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(500, 222);
+            this.Controls.Add(this.message);
+            this.Controls.Add(this.secret);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.allbloodpoint);
             this.Controls.Add(this.bloodpoint);
@@ -168,6 +195,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "<3 BloodySlasher by И е о#3212 <3";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -186,6 +214,8 @@
         private System.Windows.Forms.Label bloodpoint;
         private System.Windows.Forms.Label allbloodpoint;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox secret;
+        private System.Windows.Forms.Label message;
     }
 }
 

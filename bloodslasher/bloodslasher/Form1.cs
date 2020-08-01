@@ -51,13 +51,42 @@ namespace bloodslasher
         {
             if (cookie.Text.Length > 0)
             {
-                if (maximum.Text.Length > 0)
+                if (maximum.Text.Length <= 0)
                 {
-
+                    MessageBox.Show("Enter the number of bloodpoint you want to inject");
+                    return (-1);
+                } else if (maximum.Text.StartsWith("0"))
+                {
+                    MessageBox.Show("Please remove useless characters on your Bloodpoint value");
                 } else
                 {
-                    MessageBox.Show("Number of bloodpoint you want");
-                    return (-1);
+                    var isNumeric = int.TryParse(maximum.Text, out int n);
+                    if (n == 0)
+                    {
+                        MessageBox.Show("Please enter a correct value for Bloodpoints to inject");
+                        return (-1);
+                    } else
+                    {
+                        if (n < 15000)
+                        {
+                            if (secret.Checked == false)
+                            {
+                                MessageBox.Show("Minimum Bloodpoint to inject: 15000");
+                                return (-1);
+                            } else
+                            {
+                                MessageBox.Show("By using the Shrine of secrets, the minimum Bloodpoint to inject: 150000");
+                                return (-1);
+                            }
+                            
+                        } else
+                        {
+                            if (counter(request(10000, "Story")) == -1)
+                            {
+                                return (-1);
+                            }
+                        }
+                    }
                 }
             } else
             {
@@ -71,32 +100,39 @@ namespace bloodslasher
         {
             int limit = 999999;
             int max = Int32.Parse(maximum.Text);
-            Console.WriteLine("balance: " + balance);
-            Console.WriteLine("max:     " + max);
-            Console.WriteLine("limit:   " + limit);
 
             if (balance > limit || balance > max)
             {
                 return (1);
             }
-            else
-            {
-                return (0);
-            }
+            return (0);
         }
 
         private int counter(string response)
         {
+            int value = 0;
+
             if (response.Contains("Reached the maximum number of grants"))
             {
-                MessageBox.Show("You can't inject anymore, you need to wait. You reached the maximum number of grants (100) per hour");
-                return (-1);
+                if (response.Contains("Invalid input: Reached the maximum number of grants [4] within an hour"))
+                {
+                    MessageBox.Show("You can't inject anymore, you need to wait. You reached the maximum number of grants using the Shrine of secrets (4) per hour");
+                    return (-1);
+                } else if (response.Contains("Invalid input: Reached the maximum number of grants [100] within an hour"))
+                {
+                    MessageBox.Show("You can't inject anymore, you need to wait. You reached the maximum number of grants (100) per hour");
+                    return (-1);
+                }
             } else if (response.Contains("Invalid input: The balance is exceeding the maximum value"))
             {
                 MessageBox.Show("The balance is at the maximum value");
                 return (-1);
+            } else if (response.Contains("Operation not allowed, invalid authTokenId"))
+            {
+                MessageBox.Show("Invalid Bhvr cookie");
+                return (-1);
             }
-            int value = Int32.Parse(response.Split(':')[2].Split('}')[0]);
+            value = Int32.Parse(response.Split(':')[2].Split('}')[0]);
             return (value);
         }
 
@@ -136,7 +172,7 @@ namespace bloodslasher
                         total += increase();
                         if (goal(total) == 0)
                         {
-                            if (i < 4)
+                            if (i < 4 && secret.Checked == true)
                             {
                                 if (counter(request(150000, "shrineReward")) == -1)
                                 {
@@ -169,6 +205,24 @@ namespace bloodslasher
                 inject.BackColor = Color.Transparent;
                 inject.Enabled = true;
             }
+        }
+
+        private void secret_CheckedChanged(object sender, EventArgs e)
+        {
+            if (secret.Checked == true)
+            {
+                message.Text = "Use it only if you don't have\nalready purchased any perk on\nthe Shrine of secrets\nand use it only 1 time and\nwait Shrine reset";
+            } else
+            {
+                message.Text = "";
+            }
+            message.Refresh();
+            
+        }
+
+        private void maximum_TextChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }
