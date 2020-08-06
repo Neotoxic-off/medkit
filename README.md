@@ -1,7 +1,7 @@
 # medkit
 All my cheats for dead by daylight
 
-## LevelSlasher
+## LevelSlasher: [ XP, LEVEL, SHARDS, RIFT LEVEL ] 
 *Version 2.1*
 
 - Implement realtime visual: level
@@ -13,7 +13,7 @@ All my cheats for dead by daylight
 
 Tutorial: https://www.youtube.com/watch?v=-cXHQR2z3As
 
-## BloodySlasher
+## BloodySlasher: [ BLOODPOINTS ]
 *Version 2.0*
 
 - Immplement shrine of secret section
