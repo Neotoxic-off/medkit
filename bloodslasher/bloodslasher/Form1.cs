@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Management;
+using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace bloodslasher
@@ -15,19 +11,67 @@ namespace bloodslasher
     public partial class Form1 : Form
     {
         Random rnd = new Random();
+
+        public class Rootobject
+        {
+            public List[] list { get; set; }
+        }
+
+        public class List
+        {
+            public int balance { get; set; }
+            public string currency { get; set; }
+        }
+
         public Form1()
         {
             InitializeComponent();
         }
 
+        private int maximum_wallet()
+        {
+            var response = wallet();
+
+            Rootobject weps = JsonConvert.DeserializeObject<Rootobject>(response);
+
+            foreach (List item in weps.list)
+            {
+                if (item.currency == "Bloodpoints")
+                {
+                    allbloodpoint.Text = "Bloodpoints: " + item.balance.ToString();
+                    allbloodpoint.Refresh();
+                    if (item.balance == 1000000)
+                        return (-1);
+                }
+            }
+            return (0);
+        }
+
+        private string wallet()
+        {
+            var client = new RestClient();
+            var bhvr_request = new RestRequest()
+            {
+                Resource = "https://steam.live.bhvrdbd.com/api/v1/wallet/currencies"
+            };
+            bhvr_request.AddHeader("Accept-Encoding", "deflate, gzip");
+            bhvr_request.AddHeader("Accept", "*/*");
+            bhvr_request.AddHeader("Content-Type", "application/json");
+            client.UserAgent = "DeadByDaylight/++DeadByDaylight+Live-CL-321933 Windows/10.0.19041.1.768.64bit";
+            bhvr_request.AddCookie("bhvrSession", cookie.Text);
+            IRestResponse response = client.Get(bhvr_request);
+            Console.WriteLine("\nResponse wallet:\n" + response.Content);
+            return (response.Content);
+        }
+
         private string request(int balance, string type)
         {
             string json = "{" +
-                    "\"data\":{" + 
+                    "\"data\":{" +
                         "\"rewardType\": \"" + type + "\"," +
                         "\"walletToGrant\": {" +
                             "\"balance\":" +
-                            balance + 
+                            balance +
                         ",\"currency\": \"Bloodpoints\"}}}";
 
             var client = new RestClient();
@@ -43,7 +87,7 @@ namespace bloodslasher
             bhvr_request.AddJsonBody(json);
             IRestResponse response = client.Post(bhvr_request);
             Console.WriteLine("\nRequest:\n" + json);
-            Console.WriteLine("\nResponse:\n" + response.Content);
+            Console.WriteLine("\nResponse request:\n" + response.Content);
             return (response.Content);
         }
 
@@ -55,17 +99,20 @@ namespace bloodslasher
                 {
                     MessageBox.Show("Enter the number of bloodpoint you want to inject");
                     return (-1);
-                } else if (maximum.Text.StartsWith("0"))
+                }
+                else if (maximum.Text.StartsWith("0"))
                 {
                     MessageBox.Show("Please remove useless characters on your Bloodpoint value");
-                } else
+                }
+                else
                 {
                     var isNumeric = int.TryParse(maximum.Text, out int n);
                     if (n == 0)
                     {
                         MessageBox.Show("Please enter a correct value for Bloodpoints to inject");
                         return (-1);
-                    } else
+                    }
+                    else
                     {
                         if (n < 15000)
                         {
@@ -73,22 +120,18 @@ namespace bloodslasher
                             {
                                 MessageBox.Show("Minimum Bloodpoint to inject: 15000");
                                 return (-1);
-                            } else
+                            }
+                            else
                             {
                                 MessageBox.Show("By using the Shrine of secrets, the minimum Bloodpoint to inject: 150000");
                                 return (-1);
                             }
-                            
-                        } else
-                        {
-                            if (counter(request(10000, "Story")) == -1)
-                            {
-                                return (-1);
-                            }
+
                         }
                     }
                 }
-            } else
+            }
+            else
             {
                 MessageBox.Show("Enter your bhvr cookie");
                 return (-1);
@@ -96,61 +139,30 @@ namespace bloodslasher
             return (0);
         }
 
-        private int goal(int balance)
-        {
-            int limit = 999999;
-            int max = Int32.Parse(maximum.Text);
-
-            if (balance > limit || balance > max)
-            {
-                return (1);
-            }
-            return (0);
-        }
-
         private int counter(string response)
         {
-            int value = 0;
-
             if (response.Contains("Reached the maximum number of grants"))
             {
-                if (response.Contains("Invalid input: Reached the maximum number of grants [4] within an hour"))
-                {
-                    MessageBox.Show("You can't inject anymore, you need to wait. You reached the maximum number of grants using the Shrine of secrets (4) per hour");
-                    return (-1);
-                } else if (response.Contains("Invalid input: Reached the maximum number of grants [100] within an hour"))
-                {
-                    MessageBox.Show("You can't inject anymore, you need to wait. You reached the maximum number of grants (100) per hour");
-                    return (-1);
-                }
-            } else if (response.Contains("Invalid input: The balance is exceeding the maximum value"))
+                MessageBox.Show("You can't inject anymore, you need to wait. You reached the maximum number of grants (100) per hour");
+                return (-1);
+            }
+            else if (response.Contains("Invalid input: The balance is exceeding the maximum value"))
             {
                 MessageBox.Show("The balance is at the maximum value");
                 return (-1);
-            } else if (response.Contains("Operation not allowed, invalid authTokenId"))
+            }
+            else if (response.Contains("Operation not allowed, invalid authTokenId"))
             {
                 MessageBox.Show("Invalid Bhvr cookie");
                 return (-1);
             }
-            value = Int32.Parse(response.Split(':')[2].Split('}')[0]);
-            return (value);
+            return (0);
         }
 
         private int increase()
         {
             int[] array = { 10000, 12000, 15000 };
             return (array[rnd.Next(0, array.Length)]);
-        }
-
-        private void resume(int balance)
-        {
-            if (balance > -1)
-            {
-                Console.WriteLine("update");
-                allbloodpoint.Text = balance.ToString();
-                allbloodpoint.Refresh();
-                Console.WriteLine("update: " + allbloodpoint.Text);
-            }
         }
 
         private void inject_Click(object sender, EventArgs e)
@@ -169,8 +181,7 @@ namespace bloodslasher
                     allbloodpoint.Text = total.ToString();
                     for (int i = 0; i < 100; i++)
                     {
-                        total += increase();
-                        if (goal(total) == 0)
+                        if (maximum_wallet() == 0)
                         {
                             if (i < 4 && secret.Checked == true)
                             {
@@ -179,24 +190,25 @@ namespace bloodslasher
                                     limit = true;
                                     break;
                                 }
-                            } else
+                            }
+                            else
                             {
-                                if (counter(request(total, "Story")) == -1)
+                                if (counter(request(increase(), "Story")) == -1)
                                 {
                                     limit = true;
                                     break;
                                 }
                             }
-                        } else
+                        }
+                        else
                         {
+                            MessageBox.Show("You reached the maximum of bloodpoints in your account");
                             limit = true;
                             break;
                         }
-                        resume(total);
                     }
                     if (limit == false)
                     {
-                        resume(total);
                         MessageBox.Show("Bloodpoints injected");
                         limit = false;
                     }
@@ -212,17 +224,28 @@ namespace bloodslasher
             if (secret.Checked == true)
             {
                 message.Text = "Use it only if you don't have\nalready purchased any perk on\nthe Shrine of secrets\nand use it only 1 time and\nwait Shrine reset";
-            } else
+            }
+            else
             {
                 message.Text = "";
             }
             message.Refresh();
-            
+
         }
 
         private void maximum_TextChanged(object sender, EventArgs e)
         {
-            
+
+        }
+
+        private void allbloodpoint_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
