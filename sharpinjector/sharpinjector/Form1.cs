@@ -84,12 +84,12 @@ namespace sharpinjector
                         "\"levelVersion\":" + levelversion +
                         ",\"matchTime\":" + gameTime() +
                         ",\"platformVersion\":\"steam\",\"playerType\":\"survivor\"}}";
-
             var client = new RestClient();
             var bhvr_request = new RestRequest()
             {
                 Resource = "https://steam.live.bhvrdbd.com/api/v1/extensions/playerLevels/earnPlayerXp"
             };
+
             bhvr_request.AddHeader("Accept-Encoding", "deflate, gzip");
             bhvr_request.AddHeader("Accept", "*/*");
             bhvr_request.AddHeader("Content-Type", "application/json");
