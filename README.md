@@ -2,7 +2,7 @@
 All my cheats for dead by daylight
 
 ## LevelSlasher: [ XP, LEVEL, SHARDS, RIFT LEVEL ] 
-*Version 2.1*
+*Version 2.2*
 
 - Implement realtime visual: level
 - Implement realtime visual: xp
@@ -14,7 +14,7 @@ All my cheats for dead by daylight
 Tutorial: https://www.youtube.com/watch?v=-cXHQR2z3As
 
 ## BloodySlasher: [ BLOODPOINTS ]
-*Version 2.0*
+*Version 3.1*
 
 - Immplement shrine of secret section
 - Security increased
