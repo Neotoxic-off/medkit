@@ -1,7 +1,7 @@
 # medkit
 All my cheats for dead by daylight
 
-## LevelSlasher: [ XP, LEVEL, SHARDS, RIFT LEVEL ] 
+## Level Slasher: [ XP, LEVEL, SHARDS, RIFT LEVEL ] 
 *Version 2.2*
 
 ```
@@ -12,7 +12,7 @@ New logo
 Tutorial: https://youtu.be/_5QjelqvzpE
 
 
-## BloodySlasher: [ BLOODPOINTS ]
+## Bloody Slasher: [ BLOODPOINTS ]
 *Version 3.1*
 
 ```
@@ -24,3 +24,14 @@ New logo
 ```
 
 Tutorial: https://www.youtube.com/watch?v=LlDBLcMWJ0s
+
+
+## SSL Slasher: [ BLOODPOINTS ]
+*Version 3.6*
+
+```
+Error patched
+Increase speed
+```
+
+Tutorial: https://www.youtube.com/watch?v=jiZG0Zt7fxQ
