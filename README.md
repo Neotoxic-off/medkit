@@ -26,7 +26,7 @@ New logo
 Tutorial: https://www.youtube.com/watch?v=LlDBLcMWJ0s
 
 
-## SSL Slasher: [ BLOODPOINTS ]
+## SSL Slasher: [ SSL BYPASS ]
 *Version 3.6*
 
 ```
