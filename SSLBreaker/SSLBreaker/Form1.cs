@@ -2,35 +2,43 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
 using System.IO;
-using System.Collections.Generic;
 
 namespace SSLBreaker
 {
     public partial class main : Form
     {
-        const string dbd_steam = "steam://rungameid/381210";
         const string dbd_process = "DeadByDaylight-Win64-Shipping";
         string dbd_folder_src = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Dead by Daylight\\DeadByDaylight\\Content\\Paks\\pakchunk1-WindowsNoEditor.pak";
-        string dbd_folder_backup = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Dead by Daylight\\DeadByDaylight\\Content\\Paks\\pakchunk1-WindowsNoEditor.pak.origin";
+        string dbd_folder_backup = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Dead by Daylight\\DeadByDaylight\\Content\\Paks\\pakchunk1-WindowsNoEditor.pak.orig";
         public main()
         {
             InitializeComponent();
 
-            while (is_launched() == 1)
+            if (is_launched() == 1)
             {
-                if (status.Text != "The game is already running close it first")
+                Logs("The game is already running close it first", Color.Red);
+                bypass_launch.Enabled = false;
+                bypass_launch.ForeColor = Color.Gray;
+                bypass_launch.BackColor = Color.Gray;
+
+                payloadfiles.Enabled = false;
+                payloadfiles.ForeColor = Color.Gray;
+                payloadfiles.BackColor = Color.Gray;
+            } else
+            {
+                init_files();
+                if (check_dir(game_path.Text) == 0)
                 {
-                    Logs("The game is already running close it first", Color.Red);
-                    bypass_launch.Enabled = false;
-                    bypass_launch.ForeColor = Color.Gray;
-                    bypass_launch.BackColor = Color.Gray;
+                    Logs("Game path not found", Color.Red);
                 }
-                Thread.Sleep(2000);
+                else
+                {
+                    Logs("Game path found", Color.LimeGreen);
+                }
             }
-            Logs("Ready", Color.LimeGreen);
         }
+
         public void Logs(string message, System.Drawing.Color color)
         {
             status.ForeColor = color;
@@ -38,28 +46,23 @@ namespace SSLBreaker
             status.Refresh();
         }
 
-        private void unlock()
+        private void boxer(string message, string title, System.Windows.Forms.MessageBoxIcon type)
         {
-            dbd_launch.Enabled = true;
-            dbd_launch.ForeColor = Color.White;
-            dbd_launch.BackColor = Color.Transparent;
+            const MessageBoxButtons buttons = MessageBoxButtons.OK;
+            MessageBox.Show(message, title, buttons, type);
         }
 
         private int check_dir(string path)
         {
             if (Directory.Exists(path))
-            {
                 return (1);
-            }
-                return (0);
+            return (0);
         }
 
         private int check_path(string path)
         {
             if (File.Exists(path))
-            {
                 return (1);
-            }
             return (0);
         }
         private int backup()
@@ -75,6 +78,31 @@ namespace SSLBreaker
             }
         }
 
+        private int reset()
+        {
+            if (check_path(dbd_folder_backup) == 1)
+            {
+                Logs("Backup found", Color.LimeGreen);
+                if (check_path(dbd_folder_src) == 1)
+                {
+                    Logs("Removing bypass", Color.LimeGreen);
+                    File.Delete(dbd_folder_src);
+                    File.Move(dbd_folder_backup, dbd_folder_src);
+                    return (1);
+                }
+                else
+                {
+                    Logs("No bypass found", Color.Red);
+                    return (0);
+                }
+            }
+            else
+            {
+                Logs("No backup found", Color.Red);
+                return (0);
+            }
+        }
+
         private int is_launched()
         {
             if (Process.GetProcessesByName(dbd_process).Length != 0)
@@ -82,53 +110,57 @@ namespace SSLBreaker
             return (0);
         }
 
-        private int launch_game()
+        private string[] init_files()
         {
-            Logs("Launching", Color.Yellow);
-            if (is_launched() == 1)
+            string[] files = Directory.GetFiles(".", "*.ssl");
+
+            if (files.Length > 0)
             {
-                Logs("The game is already running, close it first", Color.Red);
-                return (0);
+                for (int i = 0; i < files.Length; i++)
+                {
+                    payloadfiles.Items.Add(files[i].Split('\\')[1]);
+                    payloadfiles.SelectedIndex = 0;
+                    payloadfiles.Refresh();
+                }
             } else
             {
-                dbd_launch.Enabled = false;
-                dbd_launch.ForeColor = Color.Gray;
-                dbd_launch.BackColor = Color.Gray;
-                Logs("Game launched", Color.LimeGreen);
-                Process.Start(dbd_steam);
-                return (1);
+                Logs("No payload found", Color.Red);
+            }
+            return (files);
+        }
+
+        private int[] load_payload()
+        {
+            if (check_path(payloadfiles.GetItemText(payloadfiles.SelectedItem)) == 1)
+            {
+                Logs("Payload found", Color.LimeGreen);
+                string text = File.ReadAllText(payloadfiles.GetItemText(payloadfiles.SelectedItem));
+                string[] tokens = text.Split(' ');
+                int[] data = new int[tokens.Length];
+
+                Logs("Reading payload", Color.Yellow);
+                for (int i = 0; i < tokens.Length; i++)
+                {
+                    data[i] = Convert.ToInt32(tokens[i], 16);
+                }
+                return (data);
+            }
+            else
+            {
+                Logs("Payload not found", Color.Red);
+                return (null);
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private int Bypass(int[] data)
         {
-            if (launch_game() == 1)
-            {
-                
-                Console.WriteLine("Game launched");
-            } else
-            {
-                Console.WriteLine("Game already launched");
-                dbd_launch.Enabled = true;
-                dbd_launch.ForeColor = Color.White;
-                dbd_launch.BackColor = Color.Transparent;
-            }
-        }
-
-        private int Bypass()
-        {
-            int index = 0x269DE4D;
-            int[] data = { 0x5b, 0x2f, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x2f, 0x45,
-                           0x6e, 0x67, 0x69, 0x6e, 0x65, 0x2e, 0x4e, 0x65, 0x74, 0x77,
-                           0x6f, 0x72, 0x6b, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67,
-                           0x73, 0x5d, 0x0d, 0x0a, 0x6e, 0x2e, 0x56, 0x65, 0x72, 0x69,
-                           0x66, 0x79, 0x50, 0x65, 0x65, 0x72, 0x3d, 0x66, 0x61, 0x6c,
-                           0x73, 0x65 };
+            int index = data[0];
             
             if (backup() == 1 && check_path(dbd_folder_src) == 1)
             {
+                Logs("Injecting payload", Color.Yellow);
                 BinaryWriter br = new BinaryWriter(File.OpenWrite(dbd_folder_src));
-                for (int i = 0; i < data.Length; i++, index++)
+                for (int i = 1; i < data.Length; i++, index++)
                 {
                     br.BaseStream.Position = index;
                     br.Write(data[i]);
@@ -144,12 +176,12 @@ namespace SSLBreaker
 
         private void bypass_launch_Click(object sender, EventArgs e)
         {
+            int[] data = null;
+
             if (check_dir(game_path.Text) == 1)
             {
                 dbd_folder_src = game_path.Text + "\\DeadByDaylight\\Content\\Paks\\pakchunk1-WindowsNoEditor.pak";
-                dbd_folder_backup = game_path.Text + "\\DeadByDaylight\\Content\\Paks\\pakchunk1-WindowsNoEditor.pak.origin";
-                Console.WriteLine("SRC: " + dbd_folder_src);
-                Console.WriteLine("Backup: " + dbd_folder_backup);
+                dbd_folder_backup = game_path.Text + "\\DeadByDaylight\\Content\\Paks\\pakchunk1-WindowsNoEditor.pak.orig";
                 if (check_path(dbd_folder_src) == 1)
                 {
                     if (check_path(dbd_folder_backup) == 0)
@@ -158,19 +190,25 @@ namespace SSLBreaker
                         bypass_launch.Enabled = false;
                         bypass_launch.ForeColor = Color.Gray;
                         bypass_launch.BackColor = Color.Gray;
-                        if (Bypass() == 1)
-                            Logs("Bypass injected", Color.LimeGreen);
-                        unlock();
+                        data = load_payload();
+                        if (data != null && data.Length > 1)
+                        {
+                            try
+                            {
+                                if (Bypass(data) == 1)
+                                    Logs("Bypass injected", Color.LimeGreen);
+                            } catch (Exception error)
+                            {
+                                boxer(error.Message, "Internal Error", MessageBoxIcon.Error);
+                            }
+                        } else
+                            Logs("Your bypass is incorrect", Color.Red);
                     } else
-                        Logs("Backup already present", Color.Red);
+                        Logs("Bypass already present", Color.Red);
                 } else
-                {
                     Logs("Game path found but doesn't contain files to patch", Color.Red);
-                }
             } else
-            {
                 Logs("Game path not found", Color.Red);
-            }
         }
 
         private void game_path_TextChanged(object sender, EventArgs e)
@@ -181,6 +219,23 @@ namespace SSLBreaker
             } else
             {
                 Logs("Game path found", Color.LimeGreen);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (check_dir(game_path.Text) == 0)
+            {
+                Logs("Game path not found", Color.Red);
+            }
+            else
+            {
+                Logs("Game path found", Color.LimeGreen);
+                if (reset() == 1)
+                {
+                    Logs("Bypass removed", Color.LimeGreen);
+                }
+                
             }
         }
     }

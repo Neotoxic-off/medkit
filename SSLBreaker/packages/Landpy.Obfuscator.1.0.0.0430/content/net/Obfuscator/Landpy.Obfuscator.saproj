@@ -1,0 +1,15 @@
+﻿<SmartAssemblyProject ProjectId="{05f467b5-d895-4d66-b044-4aa563ccc502}" Version="2.0">
+    <Configuration Name="Release">
+        <Options>
+            <ExceptionReporting Template="res:{SmartExceptions}.1033.dll" />
+            <FeatureUsageReporting Template="res:SmartUsageWithUIConsentFirstRun1033.dll" />
+            <StringsEncoding />
+            <StrongNameSigning />
+            <OtherOptimizations />
+            <Obfuscation FieldsNameMangling="2" NameMangling="3" />
+            <OtherProtections />
+            <Debugging />
+        </Options>
+        <ApplicationName />
+    </Configuration>
+</SmartAssemblyProject>

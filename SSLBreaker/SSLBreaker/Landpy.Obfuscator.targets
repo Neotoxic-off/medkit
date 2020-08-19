@@ -1,0 +1,16 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="AfterBuild">
+    <PropertyGroup>
+      <Obfuscator>SmartAssembly.com</Obfuscator>
+    </PropertyGroup>
+    <ItemGroup>
+      <SourceAssembly Include="$(TargetDir)\$(TargetName).dll">
+        <Configuration>Obfuscator\Landpy.Obfuscator.saproj</Configuration>
+      </SourceAssembly>
+    </ItemGroup>
+    <Message Importance="high" Text="Begin Obfunscating" Condition="$(ConfigurationName)=='Release'" />
+    <Exec Command="$(Obfuscator) /build &quot;$(ProjectDir)%(SourceAssembly.Configuration)&quot; /input=&quot;%(SourceAssembly.FullPath)&quot; /output=&quot;$(ProjectDir)ObfuscatorAssembly\%(SourceAssembly.FileName).dll&quot; /assembly=&quot;$(TargetName)&quot;;prune:false,controlflowobfuscate:3"
+          Condition="$(ConfigurationName)=='Release'">      
+    </Exec>
+  </Target>
+</Project>

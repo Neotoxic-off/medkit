@@ -1,10 +1,10 @@
-C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\bin\Debug\SSLBreaker.exe.config
-C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\bin\Debug\SSLBreaker.exe
-C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\bin\Debug\SSLBreaker.pdb
 C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSLBreaker.csprojAssemblyReference.cache
 C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSLBreaker.Properties.Resources.resources
 C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSLBreaker.csproj.GenerateResource.cache
 C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSLBreaker.csproj.CoreCompileInputs.cache
-C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSLBreaker.exe
-C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSLBreaker.pdb
 C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSLBreaker.main.resources
+C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\bin\Debug\SSL Slasher.exe.config
+C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\bin\Debug\SSL Slasher.exe
+C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\bin\Debug\SSL Slasher.pdb
+C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSL Slasher.exe
+C:\Users\paulg\Bureau\Dead by Neo\SSLBreaker\SSLBreaker\obj\Debug\SSL Slasher.pdb
