@@ -23,137 +23,83 @@ namespace bloodslasher
             public string currency { get; set; }
         }
 
+        public class Rootobject_error
+        {
+            public string type { get; set; }
+            public string localizationCode { get; set; }
+            public string message { get; set; }
+        }
+
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private int maximum_wallet()
+        private int maximum_wallet(string cookie)
         {
-            var response = wallet();
+            var response = request("https://steam.live.bhvrdbd.com/api/v1/wallet/currencies", null, cookie, 1);
 
             Rootobject weps = JsonConvert.DeserializeObject<Rootobject>(response);
+            Rootobject_error weps_error = JsonConvert.DeserializeObject<Rootobject_error>(response);
 
-            foreach (List item in weps.list)
+            Console.WriteLine("Error: " + weps_error);
+            if (weps != null)
             {
-                if (item.currency == "Bloodpoints")
+                foreach (List item in weps.list)
                 {
-                    allbloodpoint.Text = "Bloodpoints: " + item.balance.ToString();
-                    allbloodpoint.Refresh();
-                    if (item.balance == 1000000)
-                        return (-1);
-                }
-            }
-            return (0);
-        }
-
-        private string wallet()
-        {
-            var client = new RestClient();
-            var bhvr_request = new RestRequest()
-            {
-                Resource = "https://steam.live.bhvrdbd.com/api/v1/wallet/currencies"
-            };
-            bhvr_request.AddHeader("Accept-Encoding", "deflate, gzip");
-            bhvr_request.AddHeader("Accept", "*/*");
-            bhvr_request.AddHeader("Content-Type", "application/json");
-            client.UserAgent = "DeadByDaylight/++DeadByDaylight+Live-CL-321933 Windows/10.0.19041.1.768.64bit";
-            bhvr_request.AddCookie("bhvrSession", cookie.Text);
-            IRestResponse response = client.Get(bhvr_request);
-            Console.WriteLine("\nResponse wallet:\n" + response.Content);
-            return (response.Content);
-        }
-
-        private string request(int balance, string type)
-        {
-            string json = "{" +
-                    "\"data\":{" +
-                        "\"rewardType\": \"" + type + "\"," +
-                        "\"walletToGrant\": {" +
-                            "\"balance\":" +
-                            balance +
-                        ",\"currency\": \"Bloodpoints\"}}}";
-
-            var client = new RestClient();
-            var bhvr_request = new RestRequest()
-            {
-                Resource = "https://steam.live.bhvrdbd.com/api/v1/extensions/rewards/grantCurrency/"
-            };
-            bhvr_request.AddHeader("Accept-Encoding", "deflate, gzip");
-            bhvr_request.AddHeader("Accept", "*/*");
-            bhvr_request.AddHeader("Content-Type", "application/json");
-            client.UserAgent = "DeadByDaylight/++DeadByDaylight+Live-CL-321933 Windows/10.0.19041.1.768.64bit";
-            bhvr_request.AddCookie("bhvrSession", cookie.Text);
-            bhvr_request.AddJsonBody(json);
-            IRestResponse response = client.Post(bhvr_request);
-            Console.WriteLine("\nRequest:\n" + json);
-            Console.WriteLine("\nResponse request:\n" + response.Content);
-            return (response.Content);
-        }
-
-        private int check()
-        {
-            if (cookie.Text.Length > 0)
-            {
-                if (maximum.Text.Length <= 0)
-                {
-                    MessageBox.Show("Enter the number of bloodpoint you want to inject");
-                    return (-1);
-                }
-                else if (maximum.Text.StartsWith("0"))
-                {
-                    MessageBox.Show("Please remove useless characters on your Bloodpoint value");
-                }
-                else
-                {
-                    var isNumeric = int.TryParse(maximum.Text, out int n);
-                    if (n == 0)
+                    if (item.currency == "Bloodpoints")
                     {
-                        MessageBox.Show("Please enter a correct value for Bloodpoints to inject");
-                        return (-1);
-                    }
-                    else
-                    {
-                        if (n < 15000)
-                        {
-                            if (secret.Checked == false)
-                            {
-                                MessageBox.Show("Minimum Bloodpoint to inject: 15000");
-                                return (-1);
-                            }
-                            else
-                            {
-                                MessageBox.Show("By using the Shrine of secrets, the minimum Bloodpoint to inject: 150000");
-                                return (-1);
-                            }
-
-                        }
+                        allbloodpoint.Text = "Bloodpoints: " + item.balance.ToString();
+                        allbloodpoint.Refresh();
+                        if (item.balance == 1000000)
+                            return (1);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Enter your bhvr cookie");
+                boxer("Your cookie is incorrect", "Incorrect cookie", MessageBoxIcon.Error);
                 return (-1);
             }
             return (0);
+        }
+
+        private string request(string url, string json, string cookie, int method)
+        {
+            IRestResponse response;
+            var client = new RestClient();
+            var bhvr_request = new RestRequest()
+            {
+                Resource = url
+            };
+            bhvr_request.AddHeader("Accept-Encoding", "deflate, gzip");
+            bhvr_request.AddHeader("Accept", "*/*");
+            bhvr_request.AddHeader("Content-Type", "application/json");
+            client.UserAgent = "DeadByDaylight/++DeadByDaylight+Live-CL-321933 Windows/10.0.19041.1.768.64bit";
+            bhvr_request.AddCookie("bhvrSession", cookie);
+            if (json != null)
+                bhvr_request.AddJsonBody(json);
+            if (method == 0)
+                response = client.Post(bhvr_request);
+            else
+                response = client.Get(bhvr_request);
+            Console.WriteLine("\nResponse:\n" + response.Content);
+            return (response.Content);
+        }
+
+        private void boxer(string message, string title, System.Windows.Forms.MessageBoxIcon type)
+        {
+            const MessageBoxButtons buttons = MessageBoxButtons.OK;
+
+            MessageBox.Show(message, title, buttons, type);
         }
 
         private int counter(string response)
         {
             if (response.Contains("Reached the maximum number of grants"))
             {
-                MessageBox.Show("You can't inject anymore, you need to wait. You reached the maximum number of grants (100) per hour");
-                return (-1);
-            }
-            else if (response.Contains("Invalid input: The balance is exceeding the maximum value"))
-            {
-                MessageBox.Show("The balance is at the maximum value");
-                return (-1);
-            }
-            else if (response.Contains("Operation not allowed, invalid authTokenId"))
-            {
-                MessageBox.Show("Invalid Bhvr cookie");
+                boxer("You can't inject anymore, you need to wait. You reached the maximum number of grants per hour", "Maximum requests reached", MessageBoxIcon.Information);
                 return (-1);
             }
             return (0);
@@ -165,87 +111,76 @@ namespace bloodslasher
             return (array[rnd.Next(0, array.Length)]);
         }
 
+        private void update(Button button)
+        {
+            if (button.Enabled == true)
+            {
+                button.BackColor = Color.Gray;
+                button.ForeColor = Color.Gray;
+                button.Enabled = false;
+            }
+            else
+            {
+                button.ForeColor = Color.White;
+                button.BackColor = Color.Transparent;
+                button.Enabled = true;
+            }
+        }
+
+        private int brain()
+        {
+            int stat = 0;
+            string cookie = null;
+
+            if (Clipboard.ContainsText(TextDataFormat.Text))
+            {
+                update(inject);
+                cookie = Clipboard.GetText(TextDataFormat.Text);
+                stat = maximum_wallet(cookie);
+
+                for (int i = 0; stat == 0; i++)
+                {
+                    if (i < 4 && secret.Checked == true)
+                    {
+                        if (counter(request("https://steam.live.bhvrdbd.com/api/v1/extensions/rewards/grantCurrency/", "{\"data\":{\"rewardType\": \"shrineReward\",\"walletToGrant\": {\"balance\":150000,\"currency\": \"Bloodpoints\"}}}", cookie, 0)) == -1)
+                        {
+                            return (-1);
+                        }
+                    }
+                    else
+                    {
+                        if (counter(request("https://steam.live.bhvrdbd.com/api/v1/extensions/rewards/grantCurrency/", "{\"data\":{\"rewardType\": \"Story\",\"walletToGrant\": {\"balance\":" + increase() + ",\"currency\": \"Bloodpoints\"}}}", cookie, 0)) == -1)
+                        {
+                            return (-1);
+                        }
+                    }
+                    stat = maximum_wallet(cookie);
+                }
+                if (stat == 1)
+                {
+                    boxer("You reached the maximum of bloodpoints in your account", "Maximum reached", MessageBoxIcon.Information);
+                }
+                update(inject);
+            }
+            else
+            {
+                boxer("Copy your bhvr cookie", "No cookie found", MessageBoxIcon.Error);
+                return (-1);
+            }
+            return (0);
+        }
+
         private void inject_Click(object sender, EventArgs e)
         {
-            bool limit = false;
-            int total = 0;
-
-            if (check() == 0)
-            {
-                inject.BackColor = Color.Gray;
-                inject.ForeColor = Color.Gray;
-                inject.Enabled = false;
-
-                if (total != -1)
-                {
-                    allbloodpoint.Text = total.ToString();
-                    for (int i = 0; i < 100; i++)
-                    {
-                        if (maximum_wallet() == 0)
-                        {
-                            if (i < 4 && secret.Checked == true)
-                            {
-                                if (counter(request(150000, "shrineReward")) == -1)
-                                {
-                                    limit = true;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                if (counter(request(increase(), "Story")) == -1)
-                                {
-                                    limit = true;
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("You reached the maximum of bloodpoints in your account");
-                            limit = true;
-                            break;
-                        }
-                    }
-                    if (limit == false)
-                    {
-                        MessageBox.Show("Bloodpoints injected");
-                        limit = false;
-                    }
-                }
-                inject.ForeColor = Color.White;
-                inject.BackColor = Color.Transparent;
-                inject.Enabled = true;
-            }
+            brain();
         }
 
         private void secret_CheckedChanged(object sender, EventArgs e)
         {
             if (secret.Checked == true)
             {
-                message.Text = "Use it only if you don't have\nalready purchased any perk on\nthe Shrine of secrets\nand use it only 1 time and\nwait Shrine reset";
+                boxer("Use it only if you don't have already purchased any perk on\nthe Shrine of secrets and use it only 1 time and wait Shrine reset", "Shrine of secrets", MessageBoxIcon.Information);
             }
-            else
-            {
-                message.Text = "";
-            }
-            message.Refresh();
-
-        }
-
-        private void maximum_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void allbloodpoint_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
